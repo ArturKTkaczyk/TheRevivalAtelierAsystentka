@@ -93,7 +93,8 @@ h1 {
 
 /* Wyjście */
 .topbar { display: flex; justify-content: flex-end; }
-.logout {
+.actions { display: flex; justify-content: flex-end; margin-top: 10px; }
+.logout, .export {
   background: transparent;
   color: var(--gold);
   border: 1px solid rgba(201, 169, 110, 0.5);
@@ -103,7 +104,8 @@ h1 {
   font-weight: 300;
   cursor: pointer;
 }
-.logout:hover { border-color: var(--gold); }
+.logout:hover, .export:hover:not(:disabled) { border-color: var(--gold); }
+.export:disabled { opacity: 0.4; cursor: default; }
 
 /* Ekran hasła */
 .login-form { display: flex; flex-direction: column; gap: 10px; max-width: 320px; margin: 0 auto; }

@@ -8,6 +8,37 @@ function messageText(m: UIMessage) {
   return m.parts.map((p) => (p.type === "text" ? p.text : "")).join("");
 }
 
+const pad = (n: number) => String(n).padStart(2, "0");
+
+/** Buduje treść pliku Markdown z całej bieżącej rozmowy. */
+function toMarkdown(messages: UIMessage[], date: Date) {
+  const lines = [
+    "# Rozmowa z Marią-Luizą — The Revival Atelier",
+    "",
+    `_Wyeksportowano: ${date.toLocaleString("pl-PL")}_`,
+    "",
+    "---",
+    "",
+  ];
+  for (const m of messages) {
+    lines.push(`**${m.role === "user" ? "Ty" : "Maria-Luiza"}:**`, "", messageText(m).trim(), "");
+  }
+  return lines.join("\n");
+}
+
+/** Zapisuje rozmowę jako plik .md — wszystko dzieje się w przeglądarce. */
+function downloadMarkdown(messages: UIMessage[]) {
+  const now = new Date();
+  const stamp = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}_${pad(now.getHours())}-${pad(now.getMinutes())}`;
+  const blob = new Blob([toMarkdown(messages, now)], { type: "text/markdown;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `rozmowa-maria-luiza_${stamp}.md`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 export default function Chat() {
   const [text, setText] = useState("");
   const { messages, sendMessage, status, error, clearError } = useChat();
@@ -68,6 +99,18 @@ export default function Chat() {
           {busy ? "Czekaj…" : "Porozmawiajmy"}
         </button>
       </form>
+
+      <div className="actions">
+        <button
+          type="button"
+          className="export"
+          onClick={() => downloadMarkdown(messages)}
+          disabled={messages.length === 0 || busy}
+          title="Pobierz rozmowę jako plik Markdown"
+        >
+          Eksportuj .md
+        </button>
+      </div>
     </main>
   );
 }

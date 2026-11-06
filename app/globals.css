@@ -1,0 +1,133 @@
+:root {
+  --bg: #0A0A0A;      /* kolor dominujący */
+  --gold: #C9A96E;    /* akcenty */
+  --text: #F5F0E8;    /* tekst */
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body), sans-serif;
+  font-weight: 300;
+}
+
+.container { max-width: 640px; margin: 48px auto; padding: 0 16px; }
+
+/* Logo */
+.brand { text-align: center; }
+.logo { display: block; width: 280px; max-width: 80%; height: auto; margin: 0 auto 8px; }
+
+h1 {
+  font-family: var(--font-heading), serif;
+  font-weight: 500;
+  font-size: 2.2rem;
+  letter-spacing: 0.02em;
+  color: var(--text);
+  text-align: center;
+  margin: 0 0 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--gold);
+}
+
+.chat {
+  min-height: 320px;
+  padding: 16px;
+  border: 1px solid rgba(201, 169, 110, 0.4);
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
+
+.msg { margin: 0 0 12px; padding: 10px 14px; border-radius: 4px; line-height: 1.5; }
+.msg.user { background: rgba(245, 240, 232, 0.06); }
+.msg.bot { border-left: 2px solid var(--gold); }
+
+.author { font-weight: 400; color: var(--gold); margin-right: 6px; }
+/* Podpis asystentki — pismo odręczne */
+.msg.bot .author { font-family: var(--font-accent), cursive; font-size: 1.4rem; font-weight: 400; }
+
+.row { display: flex; gap: 8px; }
+
+.row input {
+  flex: 1;
+  padding: 12px;
+  background: transparent;
+  color: var(--text);
+  border: 1px solid rgba(201, 169, 110, 0.5);
+  border-radius: 4px;
+  font-family: inherit;
+  font-weight: 300;
+  font-size: 1rem;
+}
+.row input::placeholder { color: rgba(245, 240, 232, 0.45); }
+.row input:focus { outline: none; border-color: var(--gold); }
+
+.row button {
+  padding: 12px 20px;
+  background: var(--gold);
+  color: var(--bg);
+  border: 0;
+  border-radius: 4px;
+  font-family: inherit;
+  font-weight: 400;
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+}
+.row button:hover { background: #d8bc85; }
+.row button:disabled { opacity: 0.4; cursor: default; }
+
+/* Stan oczekiwania i błąd */
+.msg { white-space: pre-wrap; }
+.waiting { margin: 0; color: var(--gold); font-style: italic; opacity: 0.8; }
+.error {
+  margin: 8px 0 0;
+  padding: 10px 14px;
+  border: 1px solid #b4574a;
+  border-radius: 4px;
+  color: #f0b8ae;
+  white-space: pre-wrap;
+}
+
+/* Wyjście */
+.topbar { display: flex; justify-content: flex-end; }
+.logout {
+  background: transparent;
+  color: var(--gold);
+  border: 1px solid rgba(201, 169, 110, 0.5);
+  border-radius: 4px;
+  padding: 6px 14px;
+  font-family: inherit;
+  font-weight: 300;
+  cursor: pointer;
+}
+.logout:hover { border-color: var(--gold); }
+
+/* Ekran hasła */
+.login-form { display: flex; flex-direction: column; gap: 10px; max-width: 320px; margin: 0 auto; }
+.login-form label { font-family: var(--font-heading), serif; font-size: 1.3rem; text-align: center; }
+.login-form input {
+  padding: 12px;
+  background: transparent;
+  color: var(--text);
+  border: 1px solid rgba(201, 169, 110, 0.5);
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 1rem;
+}
+.login-form input:focus { outline: none; border-color: var(--gold); }
+.login-form button {
+  padding: 12px;
+  background: var(--gold);
+  color: var(--bg);
+  border: 0;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+}
+.login-form button:disabled { opacity: 0.4; cursor: default; }
+.login .error { max-width: 320px; margin: 12px auto 0; text-align: center; }

@@ -81,9 +81,6 @@ export default function Chat() {
   return (
     <main className="container">
       <div className="topbar">
-        <a className="logout" href="/demo">
-          Demo lekcji 2
-        </a>
         <button type="button" className="logout" onClick={logout}>
           Wyjdź
         </button>

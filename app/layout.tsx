@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Cormorant_Garamond, Great_Vibes, Jost } from "next/font/google";
+import { Cormorant_Garamond, Jost, Pinyon_Script } from "next/font/google";
 import "./globals.css";
 
 // Nagłówki — elegancki serif
@@ -12,12 +12,12 @@ const heading = Cormorant_Garamond({
 // Tekst — Jost Light
 const body = Jost({
   subsets: ["latin", "latin-ext"],
-  weight: ["300", "400"],
+  weight: ["300", "400", "500"],
   variable: "--font-body",
 });
 
-// Akcenty — pismo odręczne
-const accent = Great_Vibes({
+// Akcenty — pismo odręczne (Pinyon Script, podpis Maria-Luiza)
+const accent = Pinyon_Script({
   subsets: ["latin", "latin-ext"],
   weight: "400",
   variable: "--font-accent",

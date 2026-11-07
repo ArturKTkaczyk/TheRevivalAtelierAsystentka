@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "test:analiza": "node --experimental-strip-types --no-warnings --import ./tests/register.mjs --test tests/analysis.test.mjs"
   },
   "dependencies": {
     "@ai-sdk/react": "^4.0.167",

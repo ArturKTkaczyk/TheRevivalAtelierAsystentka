@@ -2,7 +2,8 @@
 
 import { useChat } from "@ai-sdk/react";
 import type { UIMessage } from "ai";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import AnalysisPanel from "./analysis-panel";
 
 function messageText(m: UIMessage) {
   return m.parts.map((p) => (p.type === "text" ? p.text : "")).join("");
@@ -43,13 +44,31 @@ export default function Chat() {
   const [text, setText] = useState("");
   const { messages, sendMessage, status, error, clearError } = useChat();
 
+  const [mode, setMode] = useState<"chat" | "analysis">("chat");
   const busy = status === "submitted" || status === "streaming";
+
+  // Okno rozmowy ma stałą wysokość i własny pasek przewijania.
+  // Przy nowych wiadomościach przewija się na dół — chyba że ktoś czyta wyżej.
+  const chatRef = useRef<HTMLDivElement>(null);
+  const stickToBottom = useRef(true);
+
+  function onScroll() {
+    const el = chatRef.current;
+    if (!el) return;
+    stickToBottom.current = el.scrollHeight - el.scrollTop - el.clientHeight < 40;
+  }
+
+  useEffect(() => {
+    const el = chatRef.current;
+    if (el && stickToBottom.current) el.scrollTop = el.scrollHeight;
+  }, [messages, status, error]);
   const canSend = text.trim().length > 0 && !busy;
 
   function send() {
     const msg = text.trim();
     if (!msg || busy) return; // blokada pustych wiadomości i podwójnego wysłania
     if (error) clearError();
+    stickToBottom.current = true; // po wysłaniu zawsze pokaż najnowsze
     sendMessage({ text: msg });
     setText("");
   }
@@ -62,6 +81,9 @@ export default function Chat() {
   return (
     <main className="container">
       <div className="topbar">
+        <a className="logout" href="/demo">
+          Demo lekcji 2
+        </a>
         <button type="button" className="logout" onClick={logout}>
           Wyjdź
         </button>
@@ -72,7 +94,34 @@ export default function Chat() {
         <h1>Asystentka The Revival Atelier</h1>
       </header>
 
-      <div className="chat">
+      <div className="tabs" role="tablist">
+        <button
+          type="button"
+          role="tab"
+          aria-selected={mode === "chat"}
+          className={mode === "chat" ? "tab active" : "tab"}
+          onClick={() => setMode("chat")}
+        >
+          Czat
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={mode === "analysis"}
+          className={mode === "analysis" ? "tab active" : "tab"}
+          onClick={() => setMode("analysis")}
+        >
+          Analiza wiadomości
+        </button>
+      </div>
+
+      {/* Oba tryby zostają w pamięci — przełączanie nie kasuje rozmowy ani wyniku analizy. */}
+      <div hidden={mode !== "analysis"}>
+        <AnalysisPanel />
+      </div>
+
+      <div hidden={mode !== "chat"}>
+      <div className="chat" ref={chatRef} onScroll={onScroll}>
         {messages.map((m) => (
           <p key={m.id} className={m.role === "user" ? "msg user" : "msg bot"}>
             <span className="author">{m.role === "user" ? "Ty" : "Maria-Luiza"}:</span>{" "}
@@ -110,6 +159,7 @@ export default function Chat() {
         >
           Eksportuj .md
         </button>
+      </div>
       </div>
     </main>
   );

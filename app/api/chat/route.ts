@@ -7,6 +7,7 @@ import {
   type UIMessage,
 } from "ai";
 import { hasValidSession } from "../../../lib/auth";
+import { ASSISTANT_INSTRUCTIONS, CHAT_FEW_SHOT, OFFER_FEW_SHOT, OFFER_INFO } from "../../../lib/prompt";
 
 // Ten plik działa wyłącznie na serwerze — klucz nigdy nie trafia do przeglądarki.
 export const maxDuration = 30;
@@ -53,6 +54,11 @@ export async function POST(req: Request) {
   // Cała historia bieżącej rozmowy idzie do modelu, więc pamięta poprzednie wiadomości.
   const result = streamText({
     model: openrouter.chat(model),
+    // Instrukcja systemowa The Revival Atelier (AI SDK 7: opcja `instructions`),
+    // nigdy w treści wiadomości użytkownika.
+    // Wersja z personą, formatem i przykładami: buildChatInstructions() z lib/prompt.ts.
+    // Instrukcja + przykłady few-shot — oba w części systemowej, nie w wiadomościach.
+    instructions: [ASSISTANT_INSTRUCTIONS, OFFER_INFO, CHAT_FEW_SHOT, OFFER_FEW_SHOT].join("\n\n"),
     messages: await convertToModelMessages(messages),
   });
 
